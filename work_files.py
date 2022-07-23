@@ -22,16 +22,20 @@ class CookBook():
     def __load_cook_book():
         dict_ = dict()
         with open(Settings.path_cook, encoding=Settings.encoding) as f:
-            for row in f.readlines():
-                if row == '\n': continue
-                elif '|' not in row:
-                    dict_[row.strip('\n')] = []
-                else:
-                    last_index = list(dict_.keys())[-1]
-                    ingredient = row.strip('\n',).split('|')
-                    dict_[last_index] += [{'ингридиент': ingredient[0].strip(), 
-                                        'количество': int(ingredient[1].strip()),
-                                        'мера': ingredient[2].strip()}]
+            while True:
+                dish = f.readline().strip('\n')
+                dict_[dish] = []
+
+                ingr_count = int(f.readline().strip('\n'))
+
+                for i in range(ingr_count):
+                    ingredient = f.readline().strip('\n',).split('|')
+                    dict_[dish] += [{'ингридиент': ingredient[0].strip(), 
+                                    'количество': int(ingredient[1].strip()),
+                                    'мера': ingredient[2].strip()}]
+                                    
+                if not f.readline(): break
+
         return dict_
 
     cook_book = __load_cook_book()
